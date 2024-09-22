@@ -2,6 +2,7 @@
 from __init__ import CURSOR, CONN
 from department import Department
 
+
 class Employee:
 
     # Dictionary of objects saved to the database.
@@ -15,7 +16,8 @@ class Employee:
 
     def __repr__(self):
         return (
-            f"<Employee {self.id}: {self.name}, {self.job_title}" + f"Department ID: {self.department_id}"
+            f"<Employee {self.id}: {self.name}, {self.job_title}, " +
+            f"Department ID: {self.department_id}>"
         )
 
     @classmethod
@@ -27,8 +29,7 @@ class Employee:
             name TEXT,
             job_title TEXT,
             department_id INTEGER,
-            FOREIGN KEY(department_id) REFERENCES departments(id)
-            )
+            FOREIGN KEY (department_id) REFERENCES departments(id))
         """
         CURSOR.execute(sql)
         CONN.commit()
@@ -43,7 +44,7 @@ class Employee:
         CONN.commit()
 
     def save(self):
-        """ Insert a new row with the name and job title values of the current Employee object.
+        """ Insert a new row with the name, job title, and department id values of the current Employee object.
         Update object id attribute using the primary key value of new row.
         Save the object in local dictionary using table row's PK as dictionary key"""
         sql = """
@@ -51,7 +52,7 @@ class Employee:
                 VALUES (?, ?, ?)
         """
 
-        CURSOR.execute(sql, (self.name, self.job_title,self.department_id))
+        CURSOR.execute(sql, (self.name, self.job_title, self.department_id))
         CONN.commit()
 
         self.id = CURSOR.lastrowid
@@ -64,7 +65,8 @@ class Employee:
             SET name = ?, job_title = ?, department_id = ?
             WHERE id = ?
         """
-        CURSOR.execute(sql, (self.name, self.job_title, self.department_id, self.id))
+        CURSOR.execute(sql, (self.name, self.job_title,
+                             self.department_id, self.id))
         CONN.commit()
 
     def delete(self):
